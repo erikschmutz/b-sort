@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <style></style>
+    <script>
+      let values = [];
+
+      function setOutput(values) {
+        document.getElementById("output").innerHTML = values.join(",");
+      }
+
+      function setError(values) {
+        document.getElementById("error").innerHTML = values;
+      }
+
+      function onChange(event) {
+        const { value } = event;
+        values = value.split(",").map((str) => str.trim());
+      }
+
+      function onSubmit() {
+        fetch("/sort", {
+          method: "POST",
+          body: JSON.stringify(values),
+          headers: {
+            "content-type": "application/json",
+          },
+        })
+          .then(async (response) => {
+            const json = await response.json();
+            setOutput(json);
+          })
+          .catch((err) => {
+            setError("" + err);
+          });
+      }
+    </script>
+    <div
+      style="
+        display: flex;
+        background-image: url(https://cdn.discordapp.com/attachments/735534562423210116/913789054988992552/image0.jpg);
+        height: 100vh;
+        width: 100vw;
+        object-fit: fill;
+        color: azure;
+        font-family: fantasy;
+      "
+    >
+      <div
+        style="
+          margin: auto;
+          background-color: rgba(0, 0, 0, 0.466);
+          padding: 3em;
+          border-radius: 5px;
+        "
+      >
+        <h1>SORTING OBJECTS</h1>
+        <input type="text" oninput="onChange(this)" placeholder="1,3,4,8,1" />
+        <button
+          style="
+            border-radius: 5px;
+            background-color: whitesmoke;
+            padding: 0.2em;
+          "
+          onclick="onSubmit()"
+        >
+          Submit
+        </button>
+        <p id="output"></p>
+        <p style="color: red" id="error"></p>
+      </div>
+    </div>
+  </body>
+</html>
